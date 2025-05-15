@@ -67,20 +67,26 @@ touch .env.dev .env.prod
 
 Edit .env.dev and .env.prod as needed:
 
-.env.dev example:
+env example:
+```env
+# === FRONTEND ===
+VITE_API_URL=http://test:8080
 
-```env
-POSTGRES_USER=devuser
-POSTGRES_PASSWORD=devpass
-POSTGRES_DB=travel_dev
-VITE_API_URL=http://localhost:8080
+# === BACKEND ===
+SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/travel_db
+SPRING_DATASOURCE_USERNAME=test_user
+SPRING_DATASOURCE_PASSWORD=test_pass
+
+# === DATABASE ===
+POSTGRES_DB=test_db
+POSTGRES_USER=test_user
+POSTGRES_PASSWORD=test_pass
 ```
-.env.prod example:
-```env
-POSTGRES_USER=produser
-POSTGRES_PASSWORD=prodpass
-POSTGRES_DB=travel_prod
-VITE_API_URL=http://backend:8080
+
+### 3. Create DB directory
+
+```bash
+mkdir db
 ```
 
 ## 🧪 Run in Development
