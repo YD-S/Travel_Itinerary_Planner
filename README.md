@@ -62,10 +62,10 @@ cd travel-itinerary-planner
 ### 2. Create and Configure Environment Files
 
 ```bash
-touch .env.dev .env.prod
+touch .env
 ```
 
-Edit .env.dev and .env.prod as needed:
+Edit .env as needed:
 
 env example:
 ```env
@@ -81,6 +81,10 @@ SPRING_DATASOURCE_PASSWORD=test_pass
 POSTGRES_DB=test_db
 POSTGRES_USER=test_user
 POSTGRES_PASSWORD=test_pass
+
+# === JWT ===
+JWT_SECRET_KEY=your_secret_key
+JWT_EXPIRATION_TIME=3600 # in seconds
 ```
 
 ### 3. Create DB directory
