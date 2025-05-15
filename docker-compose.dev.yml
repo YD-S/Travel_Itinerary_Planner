@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: frontend-dev
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+      - ./frontend/app/node_modules
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env.dev
+    networks:
+      - devnet
+
+  backend:
+    container_name: backend-dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.dev
+    networks:
+      - devnet
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    container_name: postgres-dev
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - devnet
+
+volumes:
+  pgdata:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./db
+      o: bind
+
+networks:
+  devnet:
+    driver: bridge
