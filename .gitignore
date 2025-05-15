@@ -21,7 +21,7 @@ db/
 
 # IDEs and editors
 .vscode/
-.idea/
+**/.idea/
 *.swp
 *.swo
 
