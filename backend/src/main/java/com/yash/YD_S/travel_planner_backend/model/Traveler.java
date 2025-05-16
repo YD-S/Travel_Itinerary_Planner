@@ -1,34 +1,30 @@
 package com.yash.YD_S.travel_planner_backend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "traveler")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
-
+public class Traveler {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)
-    @NotBlank
-    private String username;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "age")
+    private int age;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "traveler_type")
+    private TravelerType travelerType;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

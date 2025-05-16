@@ -1,6 +1,14 @@
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/TravelPlannerBackendApplication.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/config/OpenApiConfig.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/config/SecurityConfig.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Accommodation.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Activity.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Destination.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Traveler.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/TravelerType.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Trip.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/TripTraveler.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/TripTravelerId.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/User.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/UserRepository.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/security/CustomUserDetailsService.java
