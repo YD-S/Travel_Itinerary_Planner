@@ -1,3 +1,8 @@
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/TravelPlannerBackendApplication.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/config/OpenApiConfig.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/config/SecurityConfig.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/User.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/UserRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/security/CustomUserDetailsService.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/security/JwtAuthenticationFilter.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/security/JwtUtil.java
