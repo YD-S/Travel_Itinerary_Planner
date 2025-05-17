@@ -1,6 +1,10 @@
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/TravelPlannerBackendApplication.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/config/OpenApiConfig.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/config/SecurityConfig.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/controllers/AuthController.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/dto/AuthResponse.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/dto/LoginRequest.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/dto/RegisterRequest.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Accommodation.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Activity.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Destination.java
@@ -14,3 +18,4 @@
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/security/CustomUserDetailsService.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/security/JwtAuthenticationFilter.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/security/JwtUtil.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/service/AuthService.java
