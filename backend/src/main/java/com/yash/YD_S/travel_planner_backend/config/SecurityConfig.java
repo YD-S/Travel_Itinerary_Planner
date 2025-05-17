@@ -66,11 +66,19 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
+    /**
+     * Password encoder bean for encoding passwords.
+     * Uses BCryptPasswordEncoder for secure password hashing.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Authentication manager bean for managing authentication.
+     * Uses the provided AuthenticationConfiguration to create the manager.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
