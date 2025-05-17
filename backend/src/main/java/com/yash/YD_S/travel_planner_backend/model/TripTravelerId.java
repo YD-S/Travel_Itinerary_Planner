@@ -11,7 +11,6 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Data
 public class TripTravelerId implements Serializable {
-
     @Column(name = "trip_id")
     private Long tripId;
 

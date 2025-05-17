@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TripTraveler {
-
     @EmbeddedId
     private TripTravelerId id = new TripTravelerId();
 

@@ -17,7 +17,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class Destination {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "destination_id")
