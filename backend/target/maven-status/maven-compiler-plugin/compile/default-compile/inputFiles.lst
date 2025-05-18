@@ -8,6 +8,7 @@
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Accommodation.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Activity.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Destination.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Tasks.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Traveler.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/TravelerType.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/Trip.java
