@@ -7,5 +7,7 @@ import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
     Optional<Trip> findByTripId(Long tripId);
+    boolean existsByTripId(Long tripId);
     Optional<Trip> findByTripName(String tripName);
+    boolean existsByTripName(String tripName);
 }
