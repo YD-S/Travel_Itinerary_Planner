@@ -49,6 +49,9 @@ public class Trip {
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TripTraveler> tripTravelers = new HashSet<>();
 
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Tasks> tasks = new HashSet<>();
+
     public void addTripTraveler(TripTraveler tripTraveler) {
         tripTravelers.add(tripTraveler);
         tripTraveler.setTrip(this);
