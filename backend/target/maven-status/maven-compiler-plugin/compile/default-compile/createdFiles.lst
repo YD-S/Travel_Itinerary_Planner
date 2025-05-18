@@ -1,6 +1,8 @@
+com/yash/YD_S/travel_planner_backend/model/Tasks.class
 com/yash/YD_S/travel_planner_backend/config/OpenApiConfig.class
 com/yash/YD_S/travel_planner_backend/dto/LoginRequest.class
 com/yash/YD_S/travel_planner_backend/controllers/AuthController.class
+com/yash/YD_S/travel_planner_backend/model/Tasks$TasksBuilder.class
 com/yash/YD_S/travel_planner_backend/service/AuthService.class
 com/yash/YD_S/travel_planner_backend/TravelPlannerBackendApplication.class
 com/yash/YD_S/travel_planner_backend/dto/AuthResponse.class
