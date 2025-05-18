@@ -7,7 +7,5 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface TravelerRepository extends JpaRepository<Traveler, Long> {
-    Optional<Traveler> findByEmail(String email);
-    boolean existsByEmail(String email);
     Optional<Traveler> findByName(Traveler traveler);
 }

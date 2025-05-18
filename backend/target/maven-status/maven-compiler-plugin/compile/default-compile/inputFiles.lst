@@ -15,6 +15,13 @@
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/TripTraveler.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/TripTravelerId.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/model/User.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/AccommodationRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/ActivityRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/DestinationRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/TaskRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/TravelerRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/TripRepository.java
+/app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/TripTravelerRepository.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/repository/UserRepository.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/security/CustomUserDetailsService.java
 /app/src/main/java/com/yash/YD_S/travel_planner_backend/security/JwtAuthenticationFilter.java

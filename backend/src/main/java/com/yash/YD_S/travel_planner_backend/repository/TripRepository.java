@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
-    Optional<Trip> findByTripId(Long tripId);
-    boolean existsByTripId(Long tripId);
-    Optional<Trip> findByTripName(String tripName);
-    boolean existsByTripName(String tripName);
+    Optional<Trip> findById(Long tripId);
+    boolean existsById(Long tripId);
+    Optional<Trip> findByTitle(String tripName);
+    boolean existsByTitle(String tripName);
 }
