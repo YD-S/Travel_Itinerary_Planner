@@ -55,7 +55,7 @@ A full-stack travel planning application that helps users create, organize, and 
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/yourusername/travel-itinerary-planner.git
+git clone https://github.com/YD-S/travel-itinerary-planner.git
 cd travel-itinerary-planner
 ```
 
@@ -96,7 +96,7 @@ mkdir db
 ## 🧪 Run in Development
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.dev.yml up --build
 ```
 
 * Frontend: ``http://localhost:5173``
@@ -108,7 +108,7 @@ Hot reload is enabled for both frontend and backend.
 ## 🚢 Run in Production
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+docker compose -f docker-compose.prod.yml up --build -d
 ```
 
 * Only the frontend is exposed publicly (e.g., on port 80)
