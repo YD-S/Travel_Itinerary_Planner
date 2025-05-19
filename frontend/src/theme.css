@@ -1,0 +1,53 @@
+@theme {
+    /* === Primary Tints === */
+    --color-primary-a0: #e8af64;
+    --color-primary-a10: #ddaa68;
+    --color-primary-a20: #d2a46b;
+    --color-primary-a30: #c69f6f;
+    --color-primary-a40: #bb9a72;
+    --color-primary-a50: #af9575;
+
+    /* === Surface Colors === */
+    --color-surface-a0: #ffffff;
+    --color-surface-a10: #f0f0f0;
+    --color-surface-a20: #e1e1e1;
+    --color-surface-a30: #d3d3d3;
+    --color-surface-a40: #c5c5c5;
+    --color-surface-a50: #b6b6b6;
+
+    /* === Tonal Surface Colors === */
+    --color-tonal-a0: #fbe7d0;
+    --color-tonal-a10: #eddbc7;
+    --color-tonal-a20: #dcfcbf;
+    --color-tonal-a30: #d1c3b5;
+    --color-tonal-a40: #c3b8ac;
+    --color-tonal-a50: #b5aca3;
+}
+
+@layer base {
+    @variant dark{
+        /* === Primary Tints === */
+        --color-primary-a0: #e8af64;
+        --color-primary-a10: #ecb875;
+        --color-primary-a20: #f0c086;
+        --color-primary-a30: #f3c997;
+        --color-primary-a40: #f6d2a8;
+        --color-primary-a50: #f8dbb9;
+
+        /* === Surface Colors === */
+        --color-surface-a0: #121212;
+        --color-surface-a10: #282828;
+        --color-surface-a20: #3f3f3f;
+        --color-surface-a30: #575757;
+        --color-surface-a40: #717171;
+        --color-surface-a50: #8b8b8b;
+
+        /* === Tonal Surface Colors === */
+        --color-tonal-a0: #372d22;
+        --color-tonal-a10: #4b4137;
+        --color-tonal-a20: #5f564d;
+        --color-tonal-a30: #746c64;
+        --color-tonal-a40: #8a837c;
+        --color-tonal-a50: #a09a94;
+    }
+}
