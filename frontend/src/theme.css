@@ -24,11 +24,13 @@
     --tonal-a30: #d1c3b5;
     --tonal-a40: #c3b8ac;
     --tonal-a50: #b5aca3;
+
+    /* === Icons Colors === */
+    --icon-primary: #e8af64;
+    --icon-tonal: #282828;
 }
 
 [data-theme="dark"] {
-    --acme-canvas: oklch(0.21 0.034 264.665);
-
     /* === Primary Tints === */
     --primary-a0: #e8af64;
     --primary-a10: #ecb875;
@@ -52,6 +54,10 @@
     --tonal-a30: #746c64;
     --tonal-a40: #8a837c;
     --tonal-a50: #a09a94;
+
+    /* === Icons Colors === */
+    --icon-primary: #e8af64;
+    --icon-tonal: #f0f0f0;
 }
 
 @theme inline {
@@ -78,4 +84,8 @@
     --color-tonal-a30: var(--tonal-a30);
     --color-tonal-a40: var(--tonal-a40);
     --color-tonal-a50: var(--tonal-a50);
+
+    /* === Icons Colors === */
+    --color-icon-primary: var(--icon-primary);
+    --color-icon-tonal: var(--icon-tonal);
 }
