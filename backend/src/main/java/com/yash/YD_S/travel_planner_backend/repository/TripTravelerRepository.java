@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TripTravelerRepository extends JpaRepository<TripTraveler, Long> {
-
     List<TripTraveler> findByTraveler(Traveler traveler);
     List<TripTraveler> findByTravelerId(Long travelerId);
     List<TripTraveler> findByTrip(Trip trip);

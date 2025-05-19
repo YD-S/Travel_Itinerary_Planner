@@ -23,8 +23,8 @@ public class Activity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "destination_id", nullable = false)
-    private Destination destination;
+    @JoinColumn(name = "trip_id", nullable = false)
+    private Trip trip;
 
     @Column(name = "name", nullable = false)
     private String name;

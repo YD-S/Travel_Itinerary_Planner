@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Tasks, Long> {
     Optional<Tasks> findByTaskName(String name);
+    Optional<Tasks> findAllByTripId(Long tripId);
 }
