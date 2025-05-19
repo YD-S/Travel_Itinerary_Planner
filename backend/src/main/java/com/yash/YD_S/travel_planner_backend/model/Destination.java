@@ -36,9 +36,6 @@ public class Destination {
     private LocalDate departureDate;
 
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Activity> activities = new HashSet<>();
-
-    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Accommodation> accommodations = new HashSet<>();
 
     @CreationTimestamp
@@ -48,17 +45,6 @@ public class Destination {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-
-    public void addActivity(Activity activity) {
-        activities.add(activity);
-        activity.setDestination(this);
-    }
-
-    public void removeActivity(Activity activity) {
-        activities.remove(activity);
-        activity.setDestination(null);
-    }
 
     public void addAccommodation(Accommodation accommodation) {
         accommodations.add(accommodation);

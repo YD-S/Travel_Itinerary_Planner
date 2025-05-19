@@ -47,6 +47,9 @@ public class Trip {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Activity> activities = new HashSet<>();
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TripTraveler> tripTravelers = new HashSet<>();
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -61,5 +64,4 @@ public class Trip {
         tripTravelers.remove(tripTraveler);
         tripTraveler.setTrip(null);
     }
-
 }
