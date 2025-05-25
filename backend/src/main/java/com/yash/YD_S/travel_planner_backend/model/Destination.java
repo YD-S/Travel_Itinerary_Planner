@@ -36,6 +36,7 @@ public class Destination {
     private LocalDate departureDate;
 
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Accommodation> accommodations = new HashSet<>();
 
     @CreationTimestamp

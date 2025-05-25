@@ -10,6 +10,9 @@ import io.jsonwebtoken.security.SignatureException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Component
@@ -40,17 +43,29 @@ public class JwtUtil {
      * Generate a signed JWT with subject = username
      */
     public String generateToken(String username) {
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + jwtExpirationMs);
+        // Use UTC for all JWT timestamps to avoid timezone issues
+        Instant now = Instant.now();
+        Instant expiry = now.plusMillis(jwtExpirationMs);
+
+        // Convert to Date objects
+        Date issuedAt = Date.from(now);
+        Date expirationDate = Date.from(expiry);
+
+        // Log in your local timezone for debugging
+        ZonedDateTime localExpiry = expiry.atZone(ZoneId.systemDefault());
+        System.out.println("Token expires at (local time): " + localExpiry);
+        System.out.println("Token expires at (UTC): " + expiry);
 
         String token = Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
+                .setIssuedAt(issuedAt)
+                .setExpiration(expirationDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        log.debug("Generated JWT for {}: expires at {}", username, expiry);
+        log.debug("Generated JWT for {}: expires at {} UTC ({} local)",
+                username, expiry, localExpiry);
+
         return token;
     }
 
@@ -62,12 +77,44 @@ public class JwtUtil {
     }
 
     /**
+     * Get expiration date from token (in UTC)
+     */
+    public Date getExpirationDateFromToken(String token) {
+        return parseClaims(token).getExpiration();
+    }
+
+    /**
+     * Check if token is expired
+     */
+    public boolean isTokenExpired(String token) {
+        try {
+            Date expiration = getExpirationDateFromToken(token);
+            Date now = new Date();
+            return expiration.before(now);
+        } catch (Exception e) {
+            log.warn("Error checking token expiration: {}", e.getMessage());
+            return true;
+        }
+    }
+
+
+    /**
      * Validate signature and expiration of JWT
      */
-    // Validate the JWT token
     public boolean validateToken(String token) {
         try {
-            parseClaims(token);
+            Claims claims = parseClaims(token);
+
+            Date expiration = claims.getExpiration();
+            Date now = new Date();
+            ZonedDateTime localExpiry = expiration.toInstant().atZone(ZoneId.systemDefault());
+            ZonedDateTime localNow = now.toInstant().atZone(ZoneId.systemDefault());
+
+            log.debug("Token validation - Current time: {} UTC ({} local)",
+                    now.toInstant(), localNow);
+            log.debug("Token validation - Expires at: {} UTC ({} local)",
+                    expiration.toInstant(), localExpiry);
+
             return true;
         } catch (ExpiredJwtException e) {
             log.warn("JWT expired: {}", e.getMessage());
