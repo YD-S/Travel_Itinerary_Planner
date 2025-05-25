@@ -53,8 +53,6 @@ public class JwtUtil {
 
         // Log in your local timezone for debugging
         ZonedDateTime localExpiry = expiry.atZone(ZoneId.systemDefault());
-        System.out.println("Token expires at (local time): " + localExpiry);
-        System.out.println("Token expires at (UTC): " + expiry);
 
         String token = Jwts.builder()
                 .setSubject(username)
