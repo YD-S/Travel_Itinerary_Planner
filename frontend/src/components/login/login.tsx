@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import LoginBgLight from "../../assets/png/LoginBgLight.png";
-import LoginBgDark from "../../assets/png/LoginBgLight.png";
-import {useTheme} from "../../hooks/useTheme.tsx";
+import LoginBgDark from "../../assets/png/LoginBgDark.png";
+import {useTheme} from "../../hooks/ThemeContext.tsx";
 import ThemeButton from "../ThemeChanger/ThemeButton.tsx";
 
 function Login() {

@@ -4,15 +4,18 @@ import './index.css'
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 import App from './App.tsx'
 import Login from './components/login/login.tsx'
+import {ThemeProvider} from "./hooks/ThemeContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode >
-      <BrowserRouter>
-      <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/login" element={<Login />} />
-          {/* <Route path="/register" element={<Register />} /> */}
-      </Routes>
-      </BrowserRouter>
+      <ThemeProvider>
+          <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/login" element={<Login />} />
+              {/* <Route path="/register" element={<Register />} /> */}
+          </Routes>
+          </BrowserRouter>
+      </ThemeProvider>
   </StrictMode>,
 )
