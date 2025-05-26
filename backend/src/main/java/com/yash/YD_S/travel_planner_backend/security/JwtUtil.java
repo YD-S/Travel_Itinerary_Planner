@@ -20,7 +20,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-    // These fields are set via constructor injection
     @Value("${jwt.secret}")
     private String jwtSecret;
 
@@ -43,15 +42,12 @@ public class JwtUtil {
      * Generate a signed JWT with subject = username
      */
     public String generateToken(String username) {
-        // Use UTC for all JWT timestamps to avoid timezone issues
         Instant now = Instant.now();
         Instant expiry = now.plusMillis(jwtExpirationMs);
 
-        // Convert to Date objects
         Date issuedAt = Date.from(now);
         Date expirationDate = Date.from(expiry);
 
-        // Log in your local timezone for debugging
         ZonedDateTime localExpiry = expiry.atZone(ZoneId.systemDefault());
 
         String token = Jwts.builder()

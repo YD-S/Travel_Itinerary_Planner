@@ -28,7 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                     return new UsernameNotFoundException("User not found: " + username);
                 });
 
-        // Map your domain roles/permissions into GrantedAuthority
         List<SimpleGrantedAuthority> authorities = List.of(
                 new SimpleGrantedAuthority("ROLE_USER")
         );
