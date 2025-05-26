@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.concurrent.RecursiveTask;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,9 +44,9 @@ public class AuthController {
             if (response != null)
                 return ResponseEntity.ok(response);
             else
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Registration failed, please try again");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
@@ -67,10 +66,10 @@ public class AuthController {
             if (response != null) {
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
@@ -95,13 +94,15 @@ public class AuthController {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (AuthUser.getUsername().equals(username)) {
+            if (AuthUser.getUsername().equals(user.getUsername())) {
                 userRepository.delete(user);
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok().body("User deleted successfully");
             }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not have permission to delete this account");
+            }
         } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 }
