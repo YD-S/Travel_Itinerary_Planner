@@ -69,4 +69,31 @@ public class TripController {
         }
         return new ResponseEntity<>("Trip deleted successfully", HttpStatus.OK);
     }
+
+    @Operation(summary = "Get trip details if the user has permission",
+               description = "Retrieves the details of a trip by its ID.",
+               responses = {
+                   @ApiResponse(responseCode = "200", description = "Trip details retrieved successfully",
+                                content = @Content(schema = @Schema(implementation = Trip.class))),
+                   @ApiResponse(responseCode = "404", description = "Trip not found",
+                                content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+               })
+    @GetMapping("/{tripId}")
+    public ResponseEntity<?> getTripDetails(@PathVariable Long tripId) {
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
+
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (!tripService.getTripById(tripId).getUser().equals(user)) {
+                return new ResponseEntity<>("You do not have permission to view this trip", HttpStatus.FORBIDDEN);
+            }
+            Trip trip = tripService.getTripById(tripId);
+            return new ResponseEntity<>(trip, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
 }

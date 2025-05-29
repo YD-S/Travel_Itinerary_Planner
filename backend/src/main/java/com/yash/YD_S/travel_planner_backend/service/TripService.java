@@ -56,4 +56,9 @@ public class TripService {
         destinationRepository.deleteAll(trip.getDestinations());
         tripRepository.delete(trip);
     }
+
+    public Trip getTripById(Long tripId) {
+        return tripRepository.findById(tripId)
+                .orElseThrow(() -> new RuntimeException("Trip not found with ID: " + tripId));
+    }
 }

@@ -21,7 +21,7 @@ public class TripTraveler {
     @ManyToOne
     @MapsId("travelerId")
     @JoinColumn(name = "traveler_id")
-    private Traveler traveler;
+    private User traveler;
 
     @Column(name = "role")
     private String role; // Optional (e.g. 'primary', 'guest')
