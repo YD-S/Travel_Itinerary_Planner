@@ -1,6 +1,7 @@
 package com.yash.YD_S.travel_planner_backend.controllers;
 
 import com.yash.YD_S.travel_planner_backend.dto.CreateTrip;
+import com.yash.YD_S.travel_planner_backend.dto.TripDTO;
 import com.yash.YD_S.travel_planner_backend.dto.UpdateTrip;
 import com.yash.YD_S.travel_planner_backend.model.Trip;
 import com.yash.YD_S.travel_planner_backend.model.User;
@@ -18,6 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import static com.yash.YD_S.travel_planner_backend.mapper.TripMapper.toTripDTO;
 
 
 @RestController
@@ -37,7 +40,7 @@ public class TripController {
                                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
                })
     @PostMapping("/create")
-    public ResponseEntity<Trip> createTrip(@RequestBody CreateTrip createTrip) {
+    public ResponseEntity<TripDTO> createTrip(@RequestBody CreateTrip createTrip) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
@@ -46,7 +49,7 @@ public class TripController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Trip createdTrip = tripService.createTrip(createTrip, user);
-        return new ResponseEntity<>(createdTrip, HttpStatus.CREATED);
+        return new ResponseEntity<>(toTripDTO(createdTrip), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Delete a trip",
@@ -92,7 +95,7 @@ public class TripController {
                 return new ResponseEntity<>("You do not have permission to view this trip", HttpStatus.FORBIDDEN);
             }
             Trip trip = tripService.getTripById(tripId);
-            return new ResponseEntity<>(trip, HttpStatus.OK);
+            return new ResponseEntity<>(toTripDTO(trip), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
@@ -107,7 +110,7 @@ public class TripController {
                    @ApiResponse(responseCode = "404", description = "Trip not found or user does not have permission",
                                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
                })
-    public ResponseEntity<Trip> updateTrip(@PathVariable Long tripId, @RequestBody UpdateTrip UpdateTrip) {
+    public ResponseEntity<TripDTO> updateTrip(@PathVariable Long tripId, @RequestBody UpdateTrip UpdateTrip) {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
@@ -116,7 +119,7 @@ public class TripController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             Trip updatedTrip = tripService.updateTrip(tripId, UpdateTrip, user);
-            return new ResponseEntity<>(updatedTrip, HttpStatus.OK);
+            return new ResponseEntity<>(toTripDTO(updatedTrip), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

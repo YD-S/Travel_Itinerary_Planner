@@ -24,7 +24,7 @@ public class TripTraveler {
     private User traveler;
 
     @Column(name = "role")
-    private String role; // Optional (e.g. 'primary', 'guest')
+    private String role;
 
     @Column(name = "notes")
     private String notes;
@@ -39,6 +39,6 @@ public class TripTraveler {
         this.id = new TripTravelerId(trip.getId(), user.getId());
         this.role = "guest";
         this.notes = "";
-        this.travelerType = null; // Default type
+        this.travelerType = null;
     }
 }
