@@ -96,4 +96,28 @@ public class TripController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/update/{tripId}")
+    @Operation(summary = "Update a trip",
+               description = "Updates the details of an existing trip by its ID.",
+               responses = {
+                   @ApiResponse(responseCode = "200", description = "Trip updated successfully",
+                                content = @Content(schema = @Schema(implementation = Trip.class))),
+                   @ApiResponse(responseCode = "404", description = "Trip not found or user does not have permission",
+                                content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+               })
+    public ResponseEntity<Trip> updateTrip(@PathVariable Long tripId, @RequestBody CreateTrip createTrip) {
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
+
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            Trip updatedTrip = tripService.updateTrip(tripId, createTrip, user);
+            return new ResponseEntity<>(updatedTrip, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 }

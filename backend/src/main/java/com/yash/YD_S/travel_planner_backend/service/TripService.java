@@ -7,9 +7,10 @@ import com.yash.YD_S.travel_planner_backend.model.Trip;
 import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.DestinationRepository;
 import com.yash.YD_S.travel_planner_backend.repository.TripRepository;
+import com.yash.YD_S.travel_planner_backend.repository.TripTravelerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,53 @@ import java.util.Set;
 public class TripService {
     private final TripRepository tripRepository;
     private final DestinationRepository destinationRepository;
+    private final TripTravelerRepository tripTravelerRepository;
+
+    private Set<Destination> SetDestinations(CreateTrip tripData, Trip existingTrip) {
+        Set<Destination> updatedDestinations = new HashSet<>();
+        for (CreateDestination destData : tripData.getDestinations()) {
+            Destination destination = Destination.builder()
+                    .name(destData.getName())
+                    .arrivalDate(LocalDate.parse(destData.getArrivalDate()))
+                    .departureDate(LocalDate.parse(destData.getDepartureDate()))
+                    .trip(existingTrip)
+                    .build();
+            updatedDestinations.add(destination);
+        }
+
+        existingTrip.setDestinations(updatedDestinations);
+        return updatedDestinations;
+    }
+
+    private boolean canUserEditTrip(Trip trip, User user) {
+        if (trip.getUser().equals(user)) {
+            return true;
+        }
+
+        return tripTravelerRepository.findAllByTripId(trip.getId()).stream()
+                .anyMatch(tt -> tt.getTraveler().equals(user));
+    }
+
+    private void updateTripDetails(Trip trip, CreateTrip tripData) {
+        if (tripData.getTitle() != null) {
+            trip.setTitle(tripData.getTitle());
+        }
+        if (tripData.getDescription() != null) {
+            trip.setDescription(tripData.getDescription());
+        }
+        if (tripData.getStartDate() != null) {
+            trip.setStartDate(LocalDate.parse(tripData.getStartDate()));
+        }
+        if (tripData.getEndDate() != null) {
+            trip.setEndDate(LocalDate.parse(tripData.getEndDate()));
+        }
+    }
+
+    private void updateDestinations(Trip trip, CreateTrip tripData) {
+        Set<Destination> updatedDestinations = SetDestinations(tripData, trip); // Assuming this method exists
+        destinationRepository.saveAll(updatedDestinations);
+    }
+
 
     public Trip createTrip(CreateTrip tripData, User user) {
         Trip trip = Trip.builder()
@@ -29,18 +77,7 @@ public class TripService {
                 .user(user)
                 .build();
 
-        Set<Destination> destinations = new HashSet<>();
-        for (CreateDestination destData : tripData.getDestinations()) {
-            Destination destination = Destination.builder()
-                    .name(destData.getName())
-                    .arrivalDate(LocalDate.parse(destData.getArrivalDate()))
-                    .departureDate(LocalDate.parse(destData.getDepartureDate()))
-                    .trip(trip)
-                    .build();
-            destinations.add(destination);
-        }
-
-        trip.setDestinations(destinations);
+        Set<Destination> destinations =  SetDestinations(tripData, trip);
         Trip savedTrip = tripRepository.save(trip);
         destinationRepository.saveAll(destinations);
 
@@ -61,4 +98,17 @@ public class TripService {
         return tripRepository.findById(tripId)
                 .orElseThrow(() -> new RuntimeException("Trip not found with ID: " + tripId));
     }
+
+    public Trip updateTrip(Long tripId, CreateTrip tripData, User user) {
+        Trip existingTrip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new AccessDeniedException("Trip not found with ID: " + tripId));
+
+        if (!canUserEditTrip(existingTrip, user)) {
+            throw new AccessDeniedException("You do not have permission to update this trip: " + tripId);
+        }
+        updateTripDetails(existingTrip, tripData);
+        updateDestinations(existingTrip, tripData);
+        return tripRepository.save(existingTrip);
+    }
+
 }

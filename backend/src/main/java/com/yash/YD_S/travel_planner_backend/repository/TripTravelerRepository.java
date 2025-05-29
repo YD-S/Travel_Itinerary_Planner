@@ -11,5 +11,5 @@ public interface TripTravelerRepository extends JpaRepository<TripTraveler, Long
     List<TripTraveler> findByTraveler(User traveler);
     List<TripTraveler> findByTravelerId(Long travelerId);
     List<TripTraveler> findByTrip(Trip trip);
-    List<TripTraveler> findByTripId(Long tripId);
+    List<TripTraveler> findAllByTripId(Long tripId);
 }
