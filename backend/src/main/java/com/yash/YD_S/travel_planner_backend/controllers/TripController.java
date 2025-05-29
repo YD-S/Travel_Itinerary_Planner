@@ -1,6 +1,7 @@
 package com.yash.YD_S.travel_planner_backend.controllers;
 
 import com.yash.YD_S.travel_planner_backend.dto.CreateTrip;
+import com.yash.YD_S.travel_planner_backend.dto.UpdateTrip;
 import com.yash.YD_S.travel_planner_backend.model.Trip;
 import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.UserRepository;
@@ -106,7 +107,7 @@ public class TripController {
                    @ApiResponse(responseCode = "404", description = "Trip not found or user does not have permission",
                                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
                })
-    public ResponseEntity<Trip> updateTrip(@PathVariable Long tripId, @RequestBody CreateTrip createTrip) {
+    public ResponseEntity<Trip> updateTrip(@PathVariable Long tripId, @RequestBody UpdateTrip UpdateTrip) {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
@@ -114,7 +115,7 @@ public class TripController {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            Trip updatedTrip = tripService.updateTrip(tripId, createTrip, user);
+            Trip updatedTrip = tripService.updateTrip(tripId, UpdateTrip, user);
             return new ResponseEntity<>(updatedTrip, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
