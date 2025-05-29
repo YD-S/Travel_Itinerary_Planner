@@ -28,4 +28,8 @@ public class TripTraveler {
 
     @Column(name = "notes")
     private String notes;
+
+    @Column(name = "traveler_type")
+    @Enumerated(EnumType.STRING)
+    private TravelerType travelerType;
 }
