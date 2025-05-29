@@ -5,6 +5,7 @@ import com.yash.YD_S.travel_planner_backend.dto.CreateTrip;
 import com.yash.YD_S.travel_planner_backend.dto.UpdateTrip;
 import com.yash.YD_S.travel_planner_backend.model.Destination;
 import com.yash.YD_S.travel_planner_backend.model.Trip;
+import com.yash.YD_S.travel_planner_backend.model.TripTraveler;
 import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.DestinationRepository;
 import com.yash.YD_S.travel_planner_backend.repository.TripRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,7 +84,30 @@ public class TripService {
 
     private void updateDestinations(Trip trip, UpdateTrip tripData) {
         Set<Destination> updatedDestinations = SetDestinationsForUpdate(tripData, trip);
-        destinationRepository.saveAll(updatedDestinations);
+        if (!updatedDestinations.isEmpty()) {
+            Set<Destination> existingDestinations = trip.getDestinations();
+            existingDestinations.addAll(updatedDestinations);
+            trip.setDestinations(existingDestinations);
+            destinationRepository.saveAll(updatedDestinations);
+        }
+    }
+
+    private void updateTravelers(Trip trip, UpdateTrip tripData) {
+        if (tripData.getTravelers() == null || tripData.getTravelers().isEmpty()) return;
+
+        Set<User> existingTravelers = tripTravelerRepository.findAllByTripId(trip.getId()).stream()
+                .map(TripTraveler::getTraveler)
+                .collect(Collectors.toSet());
+
+        for (TripTraveler incoming : tripData.getTravelers()) {
+            User user = incoming.getTraveler();
+            if (user == null || user.getId() == null) {
+                throw new RuntimeException("Traveler user is not valid");
+            }
+            if (!existingTravelers.contains(user)) {
+                tripTravelerRepository.save(new TripTraveler(trip, user));
+            }
+        }
     }
 
 
@@ -125,6 +150,7 @@ public class TripService {
             throw new AccessDeniedException("You do not have permission to update this trip: " + tripId);
         }
         updateTripDetails(existingTrip, tripData);
+        updateTravelers(existingTrip, tripData);
         updateDestinations(existingTrip, tripData);
         return tripRepository.save(existingTrip);
     }

@@ -32,4 +32,13 @@ public class TripTraveler {
     @Column(name = "traveler_type")
     @Enumerated(EnumType.STRING)
     private TravelerType travelerType;
+
+    public TripTraveler(Trip trip, User user) {
+        this.trip = trip;
+        this.traveler = user;
+        this.id = new TripTravelerId(trip.getId(), user.getId());
+        this.role = "guest";
+        this.notes = "";
+        this.travelerType = null; // Default type
+    }
 }
