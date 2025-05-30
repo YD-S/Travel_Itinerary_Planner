@@ -23,6 +23,7 @@ public class TripMapper {
                 .endDate(trip.getEndDate())
                 .createdAt(trip.getCreatedAt())
                 .updatedAt(trip.getUpdatedAt())
+                .user(UserMapper.toDTO(trip.getUser()))
                 .activities(trip.getActivities() != null
                         ? trip.getActivities().stream()
                         .map(ActivityMapper::toDTO)

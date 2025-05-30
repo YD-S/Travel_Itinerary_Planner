@@ -3,6 +3,10 @@ package com.yash.YD_S.travel_planner_backend.controllers;
 import com.yash.YD_S.travel_planner_backend.dto.AuthResponse;
 import com.yash.YD_S.travel_planner_backend.dto.LoginRequest;
 import com.yash.YD_S.travel_planner_backend.dto.RegisterRequest;
+import com.yash.YD_S.travel_planner_backend.mapper.UserMapper;
+import com.yash.YD_S.travel_planner_backend.model.User;
+import com.yash.YD_S.travel_planner_backend.repository.UserRepository;
+import com.yash.YD_S.travel_planner_backend.security.JwtUtil;
 import com.yash.YD_S.travel_planner_backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +18,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,6 +28,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     @Operation(
             summary = "Register a new user",
@@ -58,11 +66,15 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             AuthResponse response = authService.login(request);
-            if (response != null) {
-                return ResponseEntity.ok(response);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-            }
+            String username = jwtUtil.getUsernameFromToken(response.getToken());
+
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            Map<String, Object> result = Map.of(
+                    "auth", response,
+                    "user", UserMapper.toDTO(user)
+            );
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
