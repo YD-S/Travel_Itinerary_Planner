@@ -14,7 +14,7 @@ public class TripMapper {
     private static TripRepository tripRepository;
     private static UserRepository userRepository;
 
-    public static TripDTO toTripDTO(Trip trip) {
+    public static TripDTO toDTO(Trip trip) {
         return TripDTO.builder()
                 .id(trip.getId())
                 .title(trip.getTitle())

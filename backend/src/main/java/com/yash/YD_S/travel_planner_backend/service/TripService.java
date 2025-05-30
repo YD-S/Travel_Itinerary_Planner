@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -164,6 +165,17 @@ public class TripService {
         updateTravelers(existingTrip, tripData);
         updateDestinations(existingTrip, tripData);
         return tripRepository.save(existingTrip);
+    }
+
+    public List<TripDTO> getAllTrips(User user) {
+        List<Trip> trips = tripRepository.findAllByUserId(user.getId());
+        List<TripDTO> tripDTOs = trips.stream()
+                .map(TripMapper::toDTO)
+                .toList();
+        if (trips.isEmpty()) {
+            throw new RuntimeException("No trips found for user with ID: " + user.getId());
+        }
+        return tripDTOs;
     }
 
 }

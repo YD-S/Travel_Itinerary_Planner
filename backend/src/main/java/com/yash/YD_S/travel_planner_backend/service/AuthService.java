@@ -3,6 +3,7 @@ package com.yash.YD_S.travel_planner_backend.service;
 import com.yash.YD_S.travel_planner_backend.dto.AuthResponse;
 import com.yash.YD_S.travel_planner_backend.dto.LoginRequest;
 import com.yash.YD_S.travel_planner_backend.dto.RegisterRequest;
+import com.yash.YD_S.travel_planner_backend.mapper.UserMapper;
 import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.UserRepository;
 import com.yash.YD_S.travel_planner_backend.security.JwtUtil;
@@ -36,7 +37,7 @@ public class AuthService {
         userRepository.save(user);
 
         String token = jwtUtil.generateToken(user.getUsername());
-        return new AuthResponse(token);
+        return new AuthResponse(token, UserMapper.toDTO(user));
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -52,6 +53,6 @@ public class AuthService {
             throw new RuntimeException("Invalid credentials");
         }
         String token = jwtUtil.generateToken(request.getUsername());
-        return new AuthResponse(token);
+        return new AuthResponse(token, UserMapper.toDTO(user));
     }
 }
