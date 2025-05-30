@@ -12,4 +12,13 @@ public class TaskMapper {
                 .completed(task.isCompleted())
                 .build();
     }
+
+    public static Tasks toEntity(TasksDTO tasksDTO) {
+        return Tasks.builder()
+                .id(tasksDTO.getId())
+                .taskName(tasksDTO.getTaskName())
+                .taskDescription(tasksDTO.getTaskDescription())
+                .completed(tasksDTO.isCompleted())
+                .build();
+    }
 }

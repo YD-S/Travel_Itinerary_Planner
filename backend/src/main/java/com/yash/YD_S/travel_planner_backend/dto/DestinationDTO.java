@@ -3,7 +3,7 @@ package com.yash.YD_S.travel_planner_backend.dto;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,5 +17,5 @@ public class DestinationDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private Set<AccommodationDTO> accommodations;
+    private List<AccommodationDTO> accommodations;
 }

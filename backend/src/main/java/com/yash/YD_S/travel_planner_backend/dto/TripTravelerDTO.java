@@ -12,4 +12,5 @@ public class TripTravelerDTO {
     private String role;
     private String notes;
     private String travelerType;
+    private UserDTO traveler;
 }

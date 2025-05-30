@@ -21,6 +21,7 @@ public class TripDTO {
     private LocalDate endDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private UserDTO user;
 
     private List<DestinationDTO> destinations;
     private List<ActivityDTO> activities;

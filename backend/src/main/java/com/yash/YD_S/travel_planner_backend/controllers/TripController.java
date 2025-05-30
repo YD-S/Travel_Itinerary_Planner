@@ -1,8 +1,6 @@
 package com.yash.YD_S.travel_planner_backend.controllers;
 
-import com.yash.YD_S.travel_planner_backend.dto.CreateTrip;
 import com.yash.YD_S.travel_planner_backend.dto.TripDTO;
-import com.yash.YD_S.travel_planner_backend.dto.UpdateTrip;
 import com.yash.YD_S.travel_planner_backend.model.Trip;
 import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.UserRepository;
@@ -40,7 +38,7 @@ public class TripController {
                                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
                })
     @PostMapping("/create")
-    public ResponseEntity<TripDTO> createTrip(@RequestBody CreateTrip createTrip) {
+    public ResponseEntity<TripDTO> createTrip(@RequestBody TripDTO createTrip) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
@@ -91,10 +89,10 @@ public class TripController {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (!tripService.getTripById(tripId).getUser().equals(user)) {
+            Trip trip = tripService.getTripById(tripId);
+            if (!trip.getUser().equals(user)) {
                 return new ResponseEntity<>("You do not have permission to view this trip", HttpStatus.FORBIDDEN);
             }
-            Trip trip = tripService.getTripById(tripId);
             return new ResponseEntity<>(toTripDTO(trip), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
@@ -110,7 +108,7 @@ public class TripController {
                    @ApiResponse(responseCode = "404", description = "Trip not found or user does not have permission",
                                 content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
                })
-    public ResponseEntity<TripDTO> updateTrip(@PathVariable Long tripId, @RequestBody UpdateTrip UpdateTrip) {
+    public ResponseEntity<TripDTO> updateTrip(@PathVariable Long tripId, @RequestBody TripDTO UpdateTrip) {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();

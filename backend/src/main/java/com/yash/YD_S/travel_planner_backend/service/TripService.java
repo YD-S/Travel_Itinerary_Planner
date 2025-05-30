@@ -1,8 +1,7 @@
 package com.yash.YD_S.travel_planner_backend.service;
 
-import com.yash.YD_S.travel_planner_backend.dto.CreateDestination;
-import com.yash.YD_S.travel_planner_backend.dto.CreateTrip;
-import com.yash.YD_S.travel_planner_backend.dto.UpdateTrip;
+import com.yash.YD_S.travel_planner_backend.dto.*;
+import com.yash.YD_S.travel_planner_backend.mapper.*;
 import com.yash.YD_S.travel_planner_backend.model.Destination;
 import com.yash.YD_S.travel_planner_backend.model.Trip;
 import com.yash.YD_S.travel_planner_backend.model.TripTraveler;
@@ -10,10 +9,12 @@ import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.DestinationRepository;
 import com.yash.YD_S.travel_planner_backend.repository.TripRepository;
 import com.yash.YD_S.travel_planner_backend.repository.TripTravelerRepository;
+import com.yash.YD_S.travel_planner_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,30 +25,15 @@ public class TripService {
     private final TripRepository tripRepository;
     private final DestinationRepository destinationRepository;
     private final TripTravelerRepository tripTravelerRepository;
+    private final UserRepository userRepository;
 
-    private Set<Destination> SetDestinationsForUpdate(UpdateTrip tripData, Trip existingTrip) {
-        Set<Destination> updatedDestinations = new HashSet<>();
-        for (CreateDestination destData : tripData.getDestinations()) {
-            Destination destination = Destination.builder()
-                    .name(destData.getName())
-                    .arrivalDate(LocalDate.parse(destData.getArrivalDate()))
-                    .departureDate(LocalDate.parse(destData.getDepartureDate()))
-                    .trip(existingTrip)
-                    .build();
-            updatedDestinations.add(destination);
-        }
-
-        existingTrip.setDestinations(updatedDestinations);
-        return updatedDestinations;
-    }
-
-    private Set<Destination> setDestinationsFromCreate(CreateTrip tripData, Trip newTrip) {
+    private Set<Destination> setDestinations(TripDTO tripData, Trip newTrip) {
         Set<Destination> newDestinations = new HashSet<>();
-        for (CreateDestination destData : tripData.getDestinations()) {
+        for (DestinationDTO destData : tripData.getDestinations()) {
             Destination destination = Destination.builder()
                     .name(destData.getName())
-                    .arrivalDate(LocalDate.parse(destData.getArrivalDate()))
-                    .departureDate(LocalDate.parse(destData.getDepartureDate()))
+                    .arrivalDate(destData.getArrivalDate())
+                    .departureDate(destData.getDepartureDate())
                     .trip(newTrip)
                     .build();
             newDestinations.add(destination);
@@ -67,7 +53,7 @@ public class TripService {
                 .anyMatch(tt -> tt.getTraveler().equals(user));
     }
 
-    private void updateTripDetails(Trip trip, UpdateTrip tripData) {
+    private void updateTripDetails(Trip trip, TripDTO tripData) {
         if (tripData.getTitle() != null) {
             trip.setTitle(tripData.getTitle());
         }
@@ -75,15 +61,15 @@ public class TripService {
             trip.setDescription(tripData.getDescription());
         }
         if (tripData.getStartDate() != null) {
-            trip.setStartDate(LocalDate.parse(tripData.getStartDate()));
+            trip.setStartDate(tripData.getStartDate());
         }
         if (tripData.getEndDate() != null) {
-            trip.setEndDate(LocalDate.parse(tripData.getEndDate()));
+            trip.setEndDate(tripData.getEndDate());
         }
     }
 
-    private void updateDestinations(Trip trip, UpdateTrip tripData) {
-        Set<Destination> updatedDestinations = SetDestinationsForUpdate(tripData, trip);
+    private void updateDestinations(Trip trip, TripDTO tripData) {
+        Set<Destination> updatedDestinations = setDestinations(tripData, trip);
         if (!updatedDestinations.isEmpty()) {
             Set<Destination> existingDestinations = trip.getDestinations();
             existingDestinations.addAll(updatedDestinations);
@@ -92,35 +78,60 @@ public class TripService {
         }
     }
 
-    private void updateTravelers(Trip trip, UpdateTrip tripData) {
+    private void updateTravelers(Trip trip, TripDTO tripData) {
         if (tripData.getTravelers() == null || tripData.getTravelers().isEmpty()) return;
 
         Set<User> existingTravelers = tripTravelerRepository.findAllByTripId(trip.getId()).stream()
                 .map(TripTraveler::getTraveler)
                 .collect(Collectors.toSet());
 
-        for (TripTraveler incoming : tripData.getTravelers()) {
-            User user = incoming.getTraveler();
+        for (TripTravelerDTO incoming : tripData.getTravelers()) {
+            UserDTO user = incoming.getTraveler();
             if (user == null || user.getId() == null) {
                 throw new RuntimeException("Traveler user is not valid");
             }
-            if (!existingTravelers.contains(user)) {
-                tripTravelerRepository.save(new TripTraveler(trip, user));
+            User userEntity = userRepository.findById(user.getId())
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + user.getId()));
+            if (!existingTravelers.contains(userEntity)) {
+                tripTravelerRepository.save(new TripTraveler(trip, userEntity));
             }
         }
     }
 
 
-    public Trip createTrip(CreateTrip tripData, User user) {
+    public Trip createTrip(TripDTO tripDTO, User user) {
         Trip trip = Trip.builder()
-                .title(tripData.getTitle())
-                .description(tripData.getDescription())
-                .startDate(LocalDate.parse(tripData.getStartDate()))
-                .endDate(LocalDate.parse(tripData.getEndDate()))
+                .id(tripDTO.getId())
+                .title(tripDTO.getTitle())
+                .description(tripDTO.getDescription())
+                .startDate(tripDTO.getStartDate())
+                .endDate(tripDTO.getEndDate())
+                .createdAt(tripDTO.getCreatedAt())
+                .updatedAt(tripDTO.getUpdatedAt())
                 .user(user)
+                .activities(tripDTO.getActivities() != null
+                        ? tripDTO.getActivities().stream()
+                        .map(ActivityMapper::toEntity)
+                        .collect(Collectors.toSet())
+                        : Collections.emptySet())
+                .destinations(tripDTO.getDestinations() != null
+                        ? tripDTO.getDestinations().stream()
+                        .map(DestinationMapper::toEntity)
+                        .collect(Collectors.toSet())
+                        : Collections.emptySet())
+                .tasks(tripDTO.getTasks() != null
+                        ? tripDTO.getTasks().stream()
+                        .map(TaskMapper::toEntity)
+                        .collect(Collectors.toSet())
+                        : Collections.emptySet())
+                .tripTravelers(tripDTO.getTravelers() != null
+                        ? tripDTO.getTravelers().stream()
+                        .map(dto -> TripTravelerMapper.toEntity(dto, tripRepository, userRepository))
+                        .collect(Collectors.toSet())
+                        : Collections.emptySet())
                 .build();
 
-        Set<Destination> destinations =  setDestinationsFromCreate(tripData, trip);
+        Set<Destination> destinations =  setDestinations(tripDTO, trip);
         Trip savedTrip = tripRepository.save(trip);
         destinationRepository.saveAll(destinations);
 
@@ -142,7 +153,7 @@ public class TripService {
                 .orElseThrow(() -> new RuntimeException("Trip not found with ID: " + tripId));
     }
 
-    public Trip updateTrip(Long tripId, UpdateTrip tripData, User user) {
+    public Trip updateTrip(Long tripId, TripDTO tripData, User user) {
         Trip existingTrip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new AccessDeniedException("Trip not found with ID: " + tripId));
 
