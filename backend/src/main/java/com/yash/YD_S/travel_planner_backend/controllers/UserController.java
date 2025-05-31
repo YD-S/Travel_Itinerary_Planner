@@ -87,7 +87,8 @@ public class UserController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "User profile updated successfully",
                             content = @Content(schema = @Schema(implementation = UserDTO.class))),
-                    @ApiResponse(responseCode = "404", description = "User not found")
+                    @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
     @PutMapping("/update")
