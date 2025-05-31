@@ -13,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static com.yash.YD_S.travel_planner_backend.mapper.UserMapper.toDTO;
 
@@ -23,6 +26,7 @@ import static com.yash.YD_S.travel_planner_backend.mapper.UserMapper.toDTO;
 @Tag(name = "User", description = "Endpoints for user management and profile operations")
 public class UserController {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Operation(
             summary = "Get user profile",
@@ -75,5 +79,27 @@ public class UserController {
         } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+    }
+    @PutMapping("/update")
+    public ResponseEntity<UserDTO> updateProfile(@RequestBody Map<String, Object> updates) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (updates.containsKey("username")) {
+            user.setUsername((String) updates.get("username"));
+        }
+        if (updates.containsKey("password")) {
+            String newPassword = (String) updates.get("password");
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
+        if (updates.containsKey("email")) {
+            user.setEmail((String) updates.get("email"));
+        }
+
+        userRepository.save(user);
+        return ResponseEntity.ok(toDTO(user));
     }
 }
