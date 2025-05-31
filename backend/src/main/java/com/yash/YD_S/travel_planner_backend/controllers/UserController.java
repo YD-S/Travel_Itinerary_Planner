@@ -1,5 +1,6 @@
 package com.yash.YD_S.travel_planner_backend.controllers;
 
+import com.yash.YD_S.travel_planner_backend.dto.RegisterRequest;
 import com.yash.YD_S.travel_planner_backend.dto.UserDTO;
 import com.yash.YD_S.travel_planner_backend.model.User;
 import com.yash.YD_S.travel_planner_backend.repository.UserRepository;
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 import static com.yash.YD_S.travel_planner_backend.mapper.UserMapper.toDTO;
 
@@ -80,23 +80,32 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+    @Operation(
+            summary = "Update user profile",
+            description = "Update the profile of the currently authenticated user.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User profile updated successfully",
+                            content = @Content(schema = @Schema(implementation = UserDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "User not found")
+            }
+    )
     @PutMapping("/update")
-    public ResponseEntity<UserDTO> updateProfile(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<UserDTO> updateProfile(@RequestBody RegisterRequest updates) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (updates.containsKey("username")) {
-            user.setUsername((String) updates.get("username"));
+        if (updates.getUsername() != null && !updates.getUsername().isEmpty()) {
+            user.setUsername(updates.getUsername());
         }
-        if (updates.containsKey("password")) {
-            String newPassword = (String) updates.get("password");
-            user.setPassword(passwordEncoder.encode(newPassword));
+        if (updates.getEmail() != null && !updates.getEmail().isEmpty()) {
+            user.setEmail(updates.getEmail());
         }
-        if (updates.containsKey("email")) {
-            user.setEmail((String) updates.get("email"));
+        if (updates.getPassword() != null && !updates.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updates.getPassword()));
         }
 
         userRepository.save(user);
