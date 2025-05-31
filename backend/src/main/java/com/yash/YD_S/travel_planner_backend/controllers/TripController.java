@@ -128,7 +128,7 @@ public class TripController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     @Operation(summary = "Get all trips for the authenticated user",
                description = "Retrieves all trips associated with the authenticated user.",
                responses = {
