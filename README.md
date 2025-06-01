@@ -7,10 +7,23 @@
 </p>
 
 <div align="center">
-[![Dockerized](https://img.shields.io/badge/Dockerized-Yes-blue)](https://www.docker.com/) [![Backend](https://img.shields.io/badge/Backend-SpringBoot-6db33f?logo=spring)](https://spring.io/projects/spring-boot)
-[![Frontend](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)](https://reactjs.org/)
-[![Database](https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql)](https://www.postgresql.org/)
-[![Built With Docker Compose](https://img.shields.io/badge/Built%20with-Docker%20Compose-2496ED?logo=docker)](https://docs.docker.com/compose/)
+
+  <a href="https://www.docker.com/">
+    <img src="https://img.shields.io/badge/Dockerized-Yes-blue" alt="Dockerized" />
+  </a>
+  <a href="https://spring.io/projects/spring-boot">
+    <img src="https://img.shields.io/badge/Backend-SpringBoot-6db33f?logo=spring" alt="Backend" />
+  </a>
+  <a href="https://reactjs.org/">
+    <img src="https://img.shields.io/badge/Frontend-React-61DAFB?logo=react" alt="Frontend" />
+  </a>
+  <a href="https://www.postgresql.org/">
+    <img src="https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql" alt="Database" />
+  </a>
+  <a href="https://docs.docker.com/compose/">
+    <img src="https://img.shields.io/badge/Built%20with-Docker%20Compose-2496ED?logo=docker" alt="Built With Docker Compose" />
+  </a>
+
 </div>
 
 
