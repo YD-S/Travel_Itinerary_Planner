@@ -6,11 +6,12 @@
   </a>
 </p>
 
+<div align="center">
 [![Dockerized](https://img.shields.io/badge/Dockerized-Yes-blue)](https://www.docker.com/) [![Backend](https://img.shields.io/badge/Backend-SpringBoot-6db33f?logo=spring)](https://spring.io/projects/spring-boot)
 [![Frontend](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)](https://reactjs.org/)
 [![Database](https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql)](https://www.postgresql.org/)
 [![Built With Docker Compose](https://img.shields.io/badge/Built%20with-Docker%20Compose-2496ED?logo=docker)](https://docs.docker.com/compose/)
-
+</div>
 
 
 A full-stack travel planning application that helps users create, organize, and manage trip itineraries. It supports trip scheduling, accommodation booking, activity planning, and integrates with travel APIs for real-time flight and hotel data.
