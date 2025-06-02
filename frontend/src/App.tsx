@@ -1,5 +1,6 @@
 import { useAuth } from './hooks/useAuth';
 import { useTheme } from './hooks/ThemeContext';
+import DisplayTrips from "./components/trips.tsx";
 
 function App() {
     const { user, logout } = useAuth();
@@ -17,6 +18,7 @@ function App() {
 
             <main>
                 <p>You are successfully logged in!</p>
+                <DisplayTrips />
             </main>
         </div>
     );
