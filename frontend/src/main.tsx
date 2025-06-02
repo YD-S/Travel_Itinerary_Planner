@@ -3,10 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 import App from './App.tsx'
-import Login from './components/login/login.tsx'
+import Login from './components/login/Login.tsx'
 import {ThemeProvider} from "./hooks/ThemeContext.tsx";
 import {AuthProvider} from "./hooks/useAuth.tsx";
 import {PrivateRoute} from "./components/PrivateRoute.tsx";
+import Register from "./components/login/Register.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode >
@@ -20,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
                   </PrivateRoute>
               } />
               <Route path="/login" element={<Login />} />
-              {/* <Route path="/register" element={<Register />} /> */}
+              <Route path="/register" element={<Register />} />
           </Routes>
           </BrowserRouter>
           </AuthProvider>
