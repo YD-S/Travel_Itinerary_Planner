@@ -8,7 +8,7 @@ function App() {
     return (
         <div className={`app ${theme}`}>
             <header>
-                <h1>Welcome, {user?.name}!</h1>
+                <h1>Welcome, {user?.username}!</h1>
                 <button onClick={toggleTheme}>
                     Switch to {theme === 'light' ? 'dark' : 'light'} mode
                 </button>
