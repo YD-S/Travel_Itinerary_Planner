@@ -1,20 +1,26 @@
 import type { AxiosResponse } from 'axios';
 import api from '../api/axios.ts';
-import {useEffect, useRef} from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+interface Trip {
+    title: string;
+    // Other fields as needed
+}
 
 function DisplayTrips() {
     const called = useRef(false);
-    let response: AxiosResponse<any, any>
+    const [response, setResponse] = useState<AxiosResponse<{ data: Trip[] }> | undefined>(undefined);
+
     useEffect(() => {
         if (called.current) return;
         called.current = true;
 
         const fetchTrips = async () => {
             try {
-                response = await api.get('api/trip/', {
+                const responseTemp = await api.get('api/trip/', {
                     headers: { "Authorization": `Bearer ${localStorage.getItem("authToken")}` }
                 });
-                console.log(response.data);
+                setResponse(responseTemp);
             } catch (error) {
                 console.error('Error fetching trips:', error);
             }
@@ -24,8 +30,8 @@ function DisplayTrips() {
 
     return (
         <div className="container">
-            {response.data.map((trip) => (
-                <p>{trip.title}</p>
+            {response?.data?.map((trip: Trip, idx: number) => (
+                <p key={idx}>{trip.title}</p>
             ))}
         </div>
     );
